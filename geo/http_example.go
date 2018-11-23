@@ -3,12 +3,12 @@ package geo
 import (
     "net/http"
 	"io/ioutil"
-
-	"github.com/yalp/jsonpath"
 	"encoding/json"
 	"os"
-
 )
+type Response struct {
+	Location Location
+}
 
  type Location struct {
  	Lat float64
@@ -31,21 +31,8 @@ func GetLocation(country string, storeId string) Location {
         panic(err)
     }
 
-	//bodyString := string(bodyBytes)
-	var store interface{}
-	err1 := json.Unmarshal([]byte(bodyBytes), &store)
-	//location :=  new(Location)
-	rawLat, err1 := jsonpath.Read(store, "$.location.lat")
-	rawLon, err1 := jsonpath.Read(store, "$.location.lon")
+	var store = Response{}
+	json.Unmarshal([]byte(bodyBytes), &store)
 
-	if err1 != nil {
-        panic(err1)
-	}
-	
-	lat := rawLat.(float64)
-	lon := rawLon.(float64)
-
-	var location Location = Location{lat, lon}
-
-	return location
+	return store.Location
 }
