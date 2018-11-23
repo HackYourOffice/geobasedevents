@@ -1,0 +1,13 @@
+dbrp "demo"."purged_data"
+
+stream
+  |from()
+    .measurement('de_dm_services_pappa_service_redeemedPoints')
+  |log()
+  |myCustomNode()
+    .names('hello')
+    
+  |influxDBOut()
+    .database('demo')
+    .retentionPolicy('geo')
+    .measurement('de_dm_services_pappa_service_redeemedPoints')
